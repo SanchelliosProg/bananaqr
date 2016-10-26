@@ -29,7 +29,8 @@ public class CodeListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(CodeListActivity.this, ScannerActivity.class);
+                startActivity(intent);
             }
         });
     }
