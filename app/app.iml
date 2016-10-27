@@ -157,8 +157,7 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.google.firebase/firebase-messaging/9.8.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.google.firebase/firebase-storage-common/9.8.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.google.firebase/firebase-storage/9.8.0/jars" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/me.dm7.barcodescanner/core/1.9/jars" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/me.dm7.barcodescanner/zxing/1.9/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.journeyapps/zxing-android-embedded/3.4.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental-classes" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental-runtime-classes" />
@@ -201,7 +200,6 @@
     <orderEntry type="library" exported="" name="play-services-vision-9.8.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-wallet-9.8.0" level="project" />
     <orderEntry type="library" exported="" name="support-core-utils-25.0.0" level="project" />
-    <orderEntry type="library" exported="" name="core-1.9" level="project" />
     <orderEntry type="library" exported="" name="play-services-tagmanager-api-9.8.0" level="project" />
     <orderEntry type="library" exported="" name="firebase-storage-9.8.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-games-9.8.0" level="project" />
@@ -239,13 +237,13 @@
     <orderEntry type="library" exported="" scope="TEST" name="jsr305-2.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-maps-9.8.0" level="project" />
     <orderEntry type="library" exported="" name="firebase-storage-common-9.8.0" level="project" />
-    <orderEntry type="library" exported="" name="zxing-1.9" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-25.0.0" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="espresso-core-2.2.2" level="project" />
     <orderEntry type="library" exported="" name="play-services-iid-9.8.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-9.8.0" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="rules-0.5" level="project" />
     <orderEntry type="library" exported="" name="play-services-auth-base-9.8.0" level="project" />
+    <orderEntry type="library" exported="" name="zxing-android-embedded-3.4.0" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="javax.inject-1" level="project" />
     <orderEntry type="library" exported="" name="firebase-auth-common-9.8.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-analytics-9.8.0" level="project" />
