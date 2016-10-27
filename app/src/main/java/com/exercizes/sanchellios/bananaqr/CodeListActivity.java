@@ -20,8 +20,6 @@ import com.google.zxing.integration.android.IntentResult;
 
 public class CodeListActivity extends AppCompatActivity {
 
-    private final int BARCODE_READER_REQUEST_CODE = 1;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,14 +32,7 @@ public class CodeListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                IntentIntegrator integrator = new IntentIntegrator(activity);
-                integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
-                integrator.setPrompt("Scan");
-                integrator.setOrientationLocked(false);
-                integrator.setCameraId(0);
-                integrator.setBeepEnabled(false);
-                integrator.setBarcodeImageEnabled(false);
-                integrator.initiateScan();
+                new IntentIntegrator(activity).setCaptureActivity(ToolbarCaptureActivity.class).initiateScan();
             }
         });
     }
