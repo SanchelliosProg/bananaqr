@@ -20,30 +20,31 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.inject.Inject;
+
 /**
  * Sample Activity extending from ActionBarActivity to display a Toolbar.
  */
 public class ToolbarCaptureActivity extends AppCompatActivity {
     private DecoratedBarcodeView barcodeScannerView;
     private BeepManager beepManager;
-    //private String lastText;
     private Set<String> resultStrings;
+
+    @Inject
+    DbHelper mDbHelper;
 
 
     private BarcodeCallback callback = new BarcodeCallback() {
         @Override
         public void barcodeResult(BarcodeResult result) {
             if(result.getText() == null || resultStrings.contains(result.getText())) {
-                // Prevent duplicate scans
                 return;
             }
 
-            //lastText = result.getText();
             resultStrings.add(result.getText());
             barcodeScannerView.setStatusText(result.getText());
             beepManager.playBeepSoundAndVibrate();
 
-            //Added preview of scanned barcode
             ImageView imageView = (ImageView) findViewById(R.id.barcodePreview);
             imageView.setImageBitmap(result.getBitmapWithResultPoints(Color.YELLOW));
         }
@@ -57,6 +58,8 @@ public class ToolbarCaptureActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initResultStringsSet();
+
+        App.getAppComponent().inject(this);
 
         setContentView(R.layout.capture_appcompat);
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
