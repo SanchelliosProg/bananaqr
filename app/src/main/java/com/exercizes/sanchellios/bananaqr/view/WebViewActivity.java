@@ -18,14 +18,13 @@ public class WebViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_web_view);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.webViewToolbar);
-        toolbar.setTitle("WEB");
+        toolbar.setTitle("Web View");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         WebView webView = (WebView)findViewById(R.id.webview);
         webView.setWebViewClient(new MyBrowser());
         webView.loadUrl(getIntent().getExtras().getString(URL));
-        toolbar.setTitle(webView.getTitle());
     }
 
     private class MyBrowser extends WebViewClient {
