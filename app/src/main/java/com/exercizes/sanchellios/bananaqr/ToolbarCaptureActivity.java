@@ -1,23 +1,62 @@
 package com.exercizes.sanchellios.bananaqr;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.ArraySet;
 import android.view.KeyEvent;
+import android.view.View;
+import android.widget.ImageView;
 
+import com.google.zxing.ResultPoint;
+import com.google.zxing.client.android.BeepManager;
+import com.journeyapps.barcodescanner.BarcodeCallback;
+import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
+
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Sample Activity extending from ActionBarActivity to display a Toolbar.
  */
 public class ToolbarCaptureActivity extends AppCompatActivity {
-    private CaptureManager capture;
     private DecoratedBarcodeView barcodeScannerView;
+    private BeepManager beepManager;
+    //private String lastText;
+    private Set<String> resultStrings;
+
+
+    private BarcodeCallback callback = new BarcodeCallback() {
+        @Override
+        public void barcodeResult(BarcodeResult result) {
+            if(result.getText() == null || resultStrings.contains(result.getText())) {
+                // Prevent duplicate scans
+                return;
+            }
+
+            //lastText = result.getText();
+            resultStrings.add(result.getText());
+            barcodeScannerView.setStatusText(result.getText());
+            beepManager.playBeepSoundAndVibrate();
+
+            //Added preview of scanned barcode
+            ImageView imageView = (ImageView) findViewById(R.id.barcodePreview);
+            imageView.setImageBitmap(result.getBitmapWithResultPoints(Color.YELLOW));
+        }
+
+        @Override
+        public void possibleResultPoints(List<ResultPoint> resultPoints) {
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initResultStringsSet();
 
         setContentView(R.layout.capture_appcompat);
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
@@ -26,35 +65,36 @@ public class ToolbarCaptureActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         barcodeScannerView = (DecoratedBarcodeView)findViewById(R.id.zxing_barcode_scanner);
+        barcodeScannerView.decodeContinuous(callback);
 
-        capture = new CaptureManager(this, barcodeScannerView);
-        capture.initializeFromIntent(getIntent(), savedInstanceState);
-        capture.decode();
+        beepManager = new BeepManager(this);
+    }
+
+    private void initResultStringsSet() {
+        resultStrings = new TreeSet<>();
+        //TODO: Load values from database
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        capture.onResume();
+        barcodeScannerView.resume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        capture.onPause();
+        barcodeScannerView.pause();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        capture.onDestroy();
+    public void pause(View view) {
+        barcodeScannerView.pause();
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        capture.onSaveInstanceState(outState);
+    public void resume(View view) {
+        barcodeScannerView.resume();
     }
+
 
     @Override
     public boolean onSupportNavigateUp() {

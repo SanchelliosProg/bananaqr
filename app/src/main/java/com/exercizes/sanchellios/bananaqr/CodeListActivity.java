@@ -38,23 +38,6 @@ public class CodeListActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if(result != null){
-            if(result.getContents() == null){
-                Log.d("MainActivity", "Cancelled scan");
-                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
-            }else {
-                Log.d("MainActivity", "Scanned");
-                Toast.makeText(this, "Scanned: "+result.getContents(), Toast.LENGTH_LONG).show();
-            }
-        }else {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_code_list, menu);
