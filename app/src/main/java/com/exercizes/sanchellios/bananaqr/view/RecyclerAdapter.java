@@ -72,6 +72,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.QrView
         }
     }
 
+    public void setData(ArrayList<QrItem> items){
+        mItems = items;
+        notifyDataSetChanged();
+    }
+
 
 
 

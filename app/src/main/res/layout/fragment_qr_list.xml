@@ -9,21 +9,34 @@
         android:id="@+id/qr_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical"/>
+        android:scrollbars="vertical"
+        />
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/empty_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        >
         <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:id="@+id/db_empty_image_view"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:src="@drawable/delete_database"
-            android:visibility="gone"/>
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:paddingBottom="32dp"/>
         <TextView
+            android:layout_below="@+id/db_empty_image_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/no_data"/>
-    </LinearLayout>
+            android:text="@string/no_data"
+            android:layout_centerHorizontal="true"/>
+    </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/qr_list_spinner"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|center_vertical" />
 </FrameLayout>

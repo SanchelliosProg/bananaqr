@@ -31,12 +31,14 @@ import java.util.TreeSet;
 
 import javax.inject.Inject;
 
+import rx.Observable;
+import rx.schedulers.Schedulers;
+
 /**
  * Sample Activity extending from ActionBarActivity to display a Toolbar.
  */
 public class CaptureActivity extends AppCompatActivity {
     private final String LOG_TAG = getClass().getSimpleName();
-    final ToneGenerator tg = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 100);
     private DecoratedBarcodeView barcodeScannerView;
     private BeepManager beepManager;
     private Set<String> resultStrings;
@@ -53,7 +55,7 @@ public class CaptureActivity extends AppCompatActivity {
             if (!Patterns.WEB_URL.matcher(url).matches()){
                 Snackbar snackbar = Snackbar.make(findViewById(R.id.buttonsLayout), "Invalid url: "+url, Snackbar.LENGTH_SHORT);
                 snackbar.show();
-                tg.startTone(ToneGenerator.TONE_CDMA_ABBR_ALERT);
+
                 resultStrings.add(url);
                 return;
             }
@@ -80,6 +82,7 @@ public class CaptureActivity extends AppCompatActivity {
         public void possibleResultPoints(List<ResultPoint> resultPoints) {
         }
     };
+
 
 
     @Override

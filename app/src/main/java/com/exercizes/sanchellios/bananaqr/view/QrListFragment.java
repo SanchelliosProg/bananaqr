@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import com.exercizes.sanchellios.bananaqr.QrItem;
 import com.exercizes.sanchellios.bananaqr.R;
@@ -22,7 +24,8 @@ import java.util.ArrayList;
  */
 public class QrListFragment extends Fragment {
     private RecyclerView mUrlRecycler;
-    private LinearLayout mEmptyView;
+    private RelativeLayout mEmptyView;
+    private ProgressBar mSpinner;
     private RecyclerAdapter mAdapter;
     private Responsive<QrItem> listener;
     public QrListFragment() {
@@ -40,34 +43,54 @@ public class QrListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_qr_list, container, false);
         mUrlRecycler = (RecyclerView)rootView.findViewById(R.id.qr_recycler);
-        mEmptyView = (LinearLayout)rootView.findViewById(R.id.empty_view);
+        mEmptyView = (RelativeLayout) rootView.findViewById(R.id.empty_view);
+        mSpinner = (ProgressBar)rootView.findViewById(R.id.qr_list_spinner);
+        notifyLoad();
+        return rootView;
+    }
+
+    private void initAdapter() {
         mAdapter = new RecyclerAdapter(listener.getData(), listener);
+        checkItemCount();
+        mUrlRecycler.setAdapter(mAdapter);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        mUrlRecycler.setLayoutManager(layoutManager);
+    }
+
+    private void checkItemCount() {
         if(mAdapter.getItemCount() == 0){
             notifyDataSetIsEmpty();
         }else {
             notifyDataSetIsNotEmpty();
         }
-        mUrlRecycler.setAdapter(mAdapter);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        mUrlRecycler.setLayoutManager(layoutManager);
-        return rootView;
+    }
+
+    public void notifyLoad(){
+        mUrlRecycler.setVisibility(View.GONE);
+        mEmptyView.setVisibility(View.GONE);
+        mSpinner.setVisibility(View.VISIBLE);
     }
 
     public void notifyDataSetIsEmpty() {
         mUrlRecycler.setVisibility(View.GONE);
         mEmptyView.setVisibility(View.VISIBLE);
-        mAdapter.notifyDataSetChanged();
+        mSpinner.setVisibility(View.GONE);
     }
 
     public void notifyDataSetIsNotEmpty() {
         mUrlRecycler.setVisibility(View.VISIBLE);
         mEmptyView.setVisibility(View.GONE);
-        mAdapter.notifyDataSetChanged();
+        mSpinner.setVisibility(View.GONE);
     }
 
     public void updateDataSet(){
-        mAdapter = new RecyclerAdapter(listener.getData(), listener);
-        mAdapter.notifyDataSetChanged();
+        if(mAdapter == null){
+            initAdapter();
+        }else {
+            mAdapter.setData(listener.getData());
+            checkItemCount();
+        }
+
     }
 
 

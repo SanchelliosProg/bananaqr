@@ -28,6 +28,10 @@ import java.util.TreeSet;
 
 import javax.inject.Inject;
 
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
 public class QrDataListActivity extends AppCompatActivity implements Responsive<QrItem> {
     private final String LOG_TAG = getClass().getSimpleName();
     private QrListFragment currentFragment;
@@ -43,8 +47,6 @@ public class QrDataListActivity extends AppCompatActivity implements Responsive<
 
         App.getAppComponent().inject(this);
 
-        mItems = getItemsFromDb();
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -56,6 +58,7 @@ public class QrDataListActivity extends AppCompatActivity implements Responsive<
         );
 
         putFragmentIntoRecycler();
+        updateDataSet();
 
     }
 
@@ -84,6 +87,7 @@ public class QrDataListActivity extends AppCompatActivity implements Responsive<
             return true;
         } else if (id == R.id.action_clean_db){
             mDbHelper.cleanDb(mDbHelper.getWritableDatabase());
+            currentFragment.notifyLoad();
             updateDataSet();
         }
 
@@ -97,8 +101,12 @@ public class QrDataListActivity extends AppCompatActivity implements Responsive<
     }
 
     private void updateDataSet() {
-        mItems = getItemsFromDb();
-        currentFragment.updateDataSet();
+        Observable.just(getItemsFromDb())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(qrItems -> mItems = qrItems,
+                        throwable -> {},
+                        () -> currentFragment.updateDataSet());
     }
 
 
