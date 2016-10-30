@@ -30,6 +30,10 @@
                   android:windowSoftInputMode="stateAlwaysHidden">
 
         </activity>
+        <provider
+            android:authorities="com.exercizes.sanchellios.bananaqr"
+            android:name=".UrlContentProvider"
+            android:exported="false"/>
     </application>
 
 </manifest>

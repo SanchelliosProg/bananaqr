@@ -1,5 +1,6 @@
 package com.exercizes.sanchellios.bananaqr;
 
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 /**
@@ -8,7 +9,14 @@ import android.provider.BaseColumns;
 
 public class QrDbContract implements BaseColumns {
 
+    public static final String CONTENT_AUTHORITY = "com.exercizes.sanchellios.bananaqr";
+    public static final Uri BASE_CONTENT_URI = Uri.parse("content://"+CONTENT_AUTHORITY);
+    public static final String PATH_URLS = "urls";
+
+
     public static final class QrTable {
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_URLS);
+
         public static final String TABLE_NAME = "qr_table";
         public static final String URL_COL = "urls";
         public static final String STATUS_CODES_COL = "status_cols";

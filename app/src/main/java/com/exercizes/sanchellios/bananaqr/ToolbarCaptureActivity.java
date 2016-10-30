@@ -2,20 +2,22 @@ package com.exercizes.sanchellios.bananaqr;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.ArraySet;
+import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.BeepManager;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
-import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -37,16 +39,32 @@ public class ToolbarCaptureActivity extends AppCompatActivity {
     private BarcodeCallback callback = new BarcodeCallback() {
         @Override
         public void barcodeResult(BarcodeResult result) {
+            String url = result.getText();
+            if (!Patterns.WEB_URL.matcher(url).matches()){
+                //TODO: Make a snackbar
+                //Toast.makeText(getApplicationContext(), "Invalid url: "+url, Toast.LENGTH_SHORT).show();
+                Snackbar snackbar = Snackbar.make(findViewById(R.id.buttonsLayout), "Invalid url: "+url, Snackbar.LENGTH_SHORT);
+                snackbar.show();
+                beepManager.playBeepSound();
+                return;
+            }
             if(result.getText() == null || resultStrings.contains(result.getText())) {
                 return;
             }
 
             resultStrings.add(result.getText());
+
+            QrItem qrItem = new QrItem(result.getText());
+            qrItem.retrieveStatusCode();
+
+
             barcodeScannerView.setStatusText(result.getText());
             beepManager.playBeepSoundAndVibrate();
 
             ImageView imageView = (ImageView) findViewById(R.id.barcodePreview);
             imageView.setImageBitmap(result.getBitmapWithResultPoints(Color.YELLOW));
+
+
         }
 
         @Override
