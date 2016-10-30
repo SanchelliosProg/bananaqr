@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.util.Log;
 
+import com.exercizes.sanchellios.bananaqr.model.DatabaseInteractor;
 import com.exercizes.sanchellios.bananaqr.model.QrDbContract;
 import com.exercizes.sanchellios.bananaqr.network.UrlHandler;
 
@@ -26,10 +27,13 @@ public class QrItem {
     @Inject
     Context mContext;
 
+
     private String mUrl;
+
+
     private int mStatusCode;
 
-    public QrItem(String url){
+    public QrItem(String url) {
         App.getAppComponent().inject(this);
         mUrl = url;
     }
@@ -38,26 +42,28 @@ public class QrItem {
         Observable.defer(() -> Observable.just(mUrlHandler.getStatusCode(mUrl))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::setStatusCode,
-                        throwable -> {mStatusCode = 0;});
-        saveToTheDatabase();
+                        throwable -> {});
     }
 
-    private void setStatusCode(int statusCode){
+    public void setStatusCode(int statusCode) {
         mStatusCode = statusCode;
+        DatabaseInteractor d = new DatabaseInteractor();
+        d.saveQrItemToDatabase(this);
         Log.d(TAG, "Status Code: " + mStatusCode);
     }
 
-    private void saveToTheDatabase(){
-        if(mStatusCode == 0){
-            return;
-        }
-        ContentValues values = new ContentValues();
-        values.put(QrDbContract.QrTable.URL_COL, mUrl);
-        values.put(QrDbContract.QrTable.STATUS_CODES_COL, mStatusCode);
-        Observable.create(s -> mContext.getContentResolver().insert(QrDbContract.QrTable.CONTENT_URI, values))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
+
+
+    public int getStatusCode() {
+        return mStatusCode;
     }
 
+    public String getUrl() {
+        return mUrl;
+    }
+
+    @Override
+    public String toString() {
+        return mUrl + ": "+mStatusCode;
+    }
 }

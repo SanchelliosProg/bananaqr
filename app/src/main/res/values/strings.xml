@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">BananaQR</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Настройки</string>
+    <string name="action_clean_db">Очистить базу данных</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

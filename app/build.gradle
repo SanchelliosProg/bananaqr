@@ -34,7 +34,6 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:25.0.0'
     compile 'com.android.support:design:25.0.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta1'
     compile 'com.android.support:support-v4:25.0.0'
     compile 'com.google.android.gms:play-services:9.8.0'
     compile 'com.journeyapps:zxing-android-embedded:3.4.0'
@@ -50,4 +49,5 @@ dependencies {
     compile 'com.trello:rxlifecycle-components:0.4.0'
     apt 'com.google.dagger:dagger-compiler:2.2'
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta2'
 }

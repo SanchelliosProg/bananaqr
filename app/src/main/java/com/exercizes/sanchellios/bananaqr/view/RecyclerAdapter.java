@@ -4,19 +4,26 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.exercizes.sanchellios.bananaqr.QrItem;
 import com.exercizes.sanchellios.bananaqr.R;
+
+import java.util.ArrayList;
+import java.util.Set;
 
 /**
  * Created by alex on 25.10.16.
  */
 
-//public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.EmotionsViewHolder> {
-
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.QrViewHolder> {
 
+    private ArrayList<QrItem> mItems;
 
+    public RecyclerAdapter(ArrayList<QrItem> items){
+        mItems = items;
+    }
 
     @Override
     public QrViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -27,12 +34,13 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.QrView
 
     @Override
     public void onBindViewHolder(QrViewHolder holder, int position) {
-        //TODO: bind data
+        holder.mUrlTextView.setText(mItems.get(position).getUrl());
+        holder.mStatusCodeTextView.setText(String.valueOf(mItems.get(position).getStatusCode()));
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return mItems.size();
     }
 
     static class QrViewHolder extends RecyclerView.ViewHolder {
@@ -45,4 +53,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.QrView
             mUrlTextView = (TextView)itemView.findViewById(R.id.urlTextView);
         }
     }
+
+
 }
