@@ -1,6 +1,8 @@
 package com.exercizes.sanchellios.bananaqr;
 
 
+import android.content.ContentValues;
+import android.content.Context;
 import android.util.Log;
 
 import java.io.IOException;
@@ -23,6 +25,9 @@ public class QrItem {
     private String TAG = getClass().getSimpleName();
     @Inject
     UrlHandler mUrlHandler;
+    @Inject
+    Context mContext;
+
     private String mUrl;
     private int mStatusCode;
 
@@ -34,13 +39,23 @@ public class QrItem {
     public void retrieveStatusCode() {
         Observable.defer(() -> Observable.just(mUrlHandler.getStatusCode(mUrl))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::setStatusCode,
-                        throwable -> {setStatusCode(0);});
+                .subscribe(this::setStatusCode);
+        saveToTheDatabase();
     }
 
     private void setStatusCode(int statusCode){
         mStatusCode = statusCode;
         Log.d(TAG, "Status Code: " + mStatusCode);
+    }
+
+    private void saveToTheDatabase(){
+        ContentValues values = new ContentValues();
+        values.put(QrDbContract.QrTable.URL_COL, mUrl);
+        values.put(QrDbContract.QrTable.STATUS_CODES_COL, mStatusCode);
+        Observable.create(s -> mContext.getContentResolver().insert(QrDbContract.QrTable.CONTENT_URI, values))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
     }
 
 }

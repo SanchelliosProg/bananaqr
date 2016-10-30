@@ -1,10 +1,14 @@
 package com.exercizes.sanchellios.bananaqr;
 
+import android.database.Cursor;
 import android.graphics.Color;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.View;
@@ -28,6 +32,8 @@ import javax.inject.Inject;
  * Sample Activity extending from ActionBarActivity to display a Toolbar.
  */
 public class ToolbarCaptureActivity extends AppCompatActivity {
+    private final String LOG_TAG = getClass().getSimpleName();
+    final ToneGenerator tg = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 100);
     private DecoratedBarcodeView barcodeScannerView;
     private BeepManager beepManager;
     private Set<String> resultStrings;
@@ -41,20 +47,20 @@ public class ToolbarCaptureActivity extends AppCompatActivity {
         public void barcodeResult(BarcodeResult result) {
             String url = result.getText();
             if (!Patterns.WEB_URL.matcher(url).matches()){
-                //TODO: Make a snackbar
-                //Toast.makeText(getApplicationContext(), "Invalid url: "+url, Toast.LENGTH_SHORT).show();
                 Snackbar snackbar = Snackbar.make(findViewById(R.id.buttonsLayout), "Invalid url: "+url, Snackbar.LENGTH_SHORT);
                 snackbar.show();
-                beepManager.playBeepSound();
+                tg.startTone(ToneGenerator.TONE_CDMA_ABBR_ALERT);
+                resultStrings.add(url);
                 return;
             }
             if(result.getText() == null || resultStrings.contains(result.getText())) {
+                Snackbar.make(findViewById(R.id.buttonsLayout), "Already in database: "+url, Snackbar.LENGTH_SHORT).show();
                 return;
             }
 
-            resultStrings.add(result.getText());
+            resultStrings.add(url);
 
-            QrItem qrItem = new QrItem(result.getText());
+            QrItem qrItem = new QrItem(url);
             qrItem.retrieveStatusCode();
 
 
@@ -93,7 +99,22 @@ public class ToolbarCaptureActivity extends AppCompatActivity {
 
     private void initResultStringsSet() {
         resultStrings = new TreeSet<>();
-        //TODO: Load values from database
+        Cursor cursor;
+        String[] projection = new String[]{QrDbContract.QrTable.URL_COL};
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            cursor = getContentResolver().query(QrDbContract.QrTable.CONTENT_URI,
+                    projection,
+                    null, null, null, null);
+        } else {
+            cursor = mDbHelper.getReadableDatabase().query(QrDbContract.QrTable.TABLE_NAME, projection, null, null, null, null, null);
+        }
+        cursor.moveToFirst();
+        while (cursor.moveToNext()){
+            String item = cursor.getString(cursor.getColumnIndex(QrDbContract.QrTable.URL_COL));
+            resultStrings.add(item);
+            Log.d(LOG_TAG, item);
+        }
+        cursor.close();
     }
 
     @Override

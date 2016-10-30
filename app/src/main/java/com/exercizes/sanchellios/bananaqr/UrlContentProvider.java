@@ -29,14 +29,27 @@ public class UrlContentProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        return false;
+        mDbHelper = new DbHelper(getContext());
+        return true;
     }
 
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs,
                         String sortOrder) {
-        return null;
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case URLS:
+                return db.query(QrDbContract.QrTable.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null, null,
+                        sortOrder);
+            default:
+                throw new IllegalArgumentException();
+        }
     }
 
     @Nullable
