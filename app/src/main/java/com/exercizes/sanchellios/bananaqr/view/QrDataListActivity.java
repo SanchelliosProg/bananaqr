@@ -1,9 +1,12 @@
 package com.exercizes.sanchellios.bananaqr.view;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -44,10 +47,13 @@ public class QrDataListActivity extends AppCompatActivity implements Responsive<
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         final Activity activity = this;
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(view -> new IntentIntegrator(activity).setCaptureActivity(CaptureActivity.class).initiateScan());
+        fab.setOnClickListener(view ->
+            new IntentIntegrator(activity).setCaptureActivity(CaptureActivity.class).initiateScan()
+        );
 
         putFragmentIntoRecycler();
 
@@ -56,7 +62,7 @@ public class QrDataListActivity extends AppCompatActivity implements Responsive<
     private void putFragmentIntoRecycler() {
         currentFragment = new QrListFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.main_lists_container, currentFragment)
-                .addToBackStack(String.valueOf(currentFragment.getClass().getSimpleName())).commit();
+                .commit();
     }
 
     @Override
@@ -78,11 +84,23 @@ public class QrDataListActivity extends AppCompatActivity implements Responsive<
             return true;
         } else if (id == R.id.action_clean_db){
             mDbHelper.cleanDb(mDbHelper.getWritableDatabase());
-            currentFragment.updateDataSet();
+            updateDataSet();
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        updateDataSet();
+    }
+
+    private void updateDataSet() {
+        mItems = getItemsFromDb();
+        currentFragment.updateDataSet();
+    }
+
 
     @Override
     public ArrayList<QrItem> getData() {
@@ -114,7 +132,14 @@ public class QrDataListActivity extends AppCompatActivity implements Responsive<
     }
 
     @Override
-    public void openWebView() {
+    public void openWebView(String url) {
+        Intent intent = new Intent(QrDataListActivity.this, WebViewActivity.class);
+        intent.putExtra(WebViewActivity.URL, url);
+        startActivity(intent);
+    }
 
+    @Override
+    public void activateSnackbar() {
+        Snackbar.make(findViewById(R.id.main_lists_container), "Невозможно перейти на страницу", Snackbar.LENGTH_LONG).show();
     }
 }

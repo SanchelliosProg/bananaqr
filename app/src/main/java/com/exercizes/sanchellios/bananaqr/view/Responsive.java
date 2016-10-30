@@ -8,5 +8,6 @@ import java.util.ArrayList;
 
 public interface Responsive<T> {
     ArrayList<T> getData();
-    void openWebView();
+    void openWebView(String url);
+    void activateSnackbar();
 }

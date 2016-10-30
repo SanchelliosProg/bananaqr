@@ -1,12 +1,10 @@
 package com.exercizes.sanchellios.bananaqr;
 
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.util.Log;
 
 import com.exercizes.sanchellios.bananaqr.model.DatabaseInteractor;
-import com.exercizes.sanchellios.bananaqr.model.QrDbContract;
 import com.exercizes.sanchellios.bananaqr.network.UrlHandler;
 
 import javax.inject.Inject;
@@ -39,19 +37,23 @@ public class QrItem {
     }
 
     public void retrieveStatusCode() {
-        Observable.defer(() -> Observable.just(mUrlHandler.getStatusCode(mUrl))).subscribeOn(Schedulers.io())
+        Observable.defer(() -> Observable.just(mUrlHandler.getStatusCode(mUrl)))
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::setStatusCode,
-                        throwable -> {});
+                        throwable -> {},
+                        this::saveToDb);
     }
 
     public void setStatusCode(int statusCode) {
         mStatusCode = statusCode;
-        DatabaseInteractor d = new DatabaseInteractor();
-        d.saveQrItemToDatabase(this);
         Log.d(TAG, "Status Code: " + mStatusCode);
     }
 
+    private void saveToDb() {
+        DatabaseInteractor d = new DatabaseInteractor();
+        d.saveQrItemToDatabase(this);
+    }
 
 
     public int getStatusCode() {

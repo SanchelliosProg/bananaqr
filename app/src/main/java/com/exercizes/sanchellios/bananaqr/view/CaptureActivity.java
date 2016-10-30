@@ -15,7 +15,6 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.exercizes.sanchellios.bananaqr.App;
-import com.exercizes.sanchellios.bananaqr.model.DatabaseInteractor;
 import com.exercizes.sanchellios.bananaqr.model.QrDbContract;
 import com.exercizes.sanchellios.bananaqr.QrItem;
 import com.exercizes.sanchellios.bananaqr.R;
@@ -41,7 +40,7 @@ public class CaptureActivity extends AppCompatActivity {
     private DecoratedBarcodeView barcodeScannerView;
     private BeepManager beepManager;
     private Set<String> resultStrings;
-    private DatabaseInteractor mDatabaseInteractor;
+    private QrItem mQrItem;
 
     @Inject
     DbHelper mDbHelper;
@@ -65,8 +64,8 @@ public class CaptureActivity extends AppCompatActivity {
 
             resultStrings.add(url);
 
-            QrItem qrItem = new QrItem(url);
-            qrItem.retrieveStatusCode();
+            mQrItem = new QrItem(url);
+            mQrItem.retrieveStatusCode();
 
             barcodeScannerView.setStatusText(result.getText());
             beepManager.playBeepSoundAndVibrate();
@@ -91,7 +90,7 @@ public class CaptureActivity extends AppCompatActivity {
         App.getAppComponent().inject(this);
 
         setContentView(R.layout.capture_appcompat);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.capture_toolbar);
         toolbar.setTitle("Scan Barcode");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -100,8 +99,6 @@ public class CaptureActivity extends AppCompatActivity {
         barcodeScannerView.decodeContinuous(callback);
 
         beepManager = new BeepManager(this);
-
-        mDatabaseInteractor = new DatabaseInteractor();
     }
 
     private void initResultStringsSet() {

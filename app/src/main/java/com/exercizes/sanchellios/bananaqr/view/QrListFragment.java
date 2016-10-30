@@ -41,7 +41,7 @@ public class QrListFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_qr_list, container, false);
         mUrlRecycler = (RecyclerView)rootView.findViewById(R.id.qr_recycler);
         mEmptyView = (LinearLayout)rootView.findViewById(R.id.empty_view);
-        mAdapter = new RecyclerAdapter(listener.getData());
+        mAdapter = new RecyclerAdapter(listener.getData(), listener);
         if(mAdapter.getItemCount() == 0){
             notifyDataSetIsEmpty();
         }else {
@@ -52,7 +52,6 @@ public class QrListFragment extends Fragment {
         mUrlRecycler.setLayoutManager(layoutManager);
         return rootView;
     }
-
 
     public void notifyDataSetIsEmpty() {
         mUrlRecycler.setVisibility(View.GONE);
@@ -67,7 +66,7 @@ public class QrListFragment extends Fragment {
     }
 
     public void updateDataSet(){
-        mAdapter = new RecyclerAdapter(listener.getData());
+        mAdapter = new RecyclerAdapter(listener.getData(), listener);
         mAdapter.notifyDataSetChanged();
     }
 
