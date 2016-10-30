@@ -1,4 +1,4 @@
-package com.exercizes.sanchellios.bananaqr;
+package com.exercizes.sanchellios.bananaqr.view;
 
 import android.database.Cursor;
 import android.graphics.Color;
@@ -13,15 +13,18 @@ import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
+import com.exercizes.sanchellios.bananaqr.App;
+import com.exercizes.sanchellios.bananaqr.model.QrDbContract;
+import com.exercizes.sanchellios.bananaqr.QrItem;
+import com.exercizes.sanchellios.bananaqr.R;
+import com.exercizes.sanchellios.bananaqr.model.DbHelper;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.BeepManager;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -31,7 +34,7 @@ import javax.inject.Inject;
 /**
  * Sample Activity extending from ActionBarActivity to display a Toolbar.
  */
-public class ToolbarCaptureActivity extends AppCompatActivity {
+public class CaptureActivity extends AppCompatActivity {
     private final String LOG_TAG = getClass().getSimpleName();
     final ToneGenerator tg = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 100);
     private DecoratedBarcodeView barcodeScannerView;
@@ -78,6 +81,10 @@ public class ToolbarCaptureActivity extends AppCompatActivity {
         }
     };
 
+    public void cancel(){
+        return;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,7 +113,8 @@ public class ToolbarCaptureActivity extends AppCompatActivity {
                     projection,
                     null, null, null, null);
         } else {
-            cursor = mDbHelper.getReadableDatabase().query(QrDbContract.QrTable.TABLE_NAME, projection, null, null, null, null, null);
+            cursor = mDbHelper.getReadableDatabase().query(QrDbContract.QrTable.TABLE_NAME,
+                    projection, null, null, null, null, null);
         }
         cursor.moveToFirst();
         while (cursor.moveToNext()){

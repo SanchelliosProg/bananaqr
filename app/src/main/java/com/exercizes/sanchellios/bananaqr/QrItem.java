@@ -5,15 +5,13 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.util.Log;
 
-import java.io.IOException;
+import com.exercizes.sanchellios.bananaqr.model.QrDbContract;
+import com.exercizes.sanchellios.bananaqr.network.UrlHandler;
 
 import javax.inject.Inject;
 
 import rx.Observable;
-import rx.Scheduler;
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func0;
 import rx.schedulers.Schedulers;
 
 /**
@@ -39,7 +37,8 @@ public class QrItem {
     public void retrieveStatusCode() {
         Observable.defer(() -> Observable.just(mUrlHandler.getStatusCode(mUrl))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::setStatusCode);
+                .subscribe(this::setStatusCode,
+                        throwable -> {mStatusCode = 0;});
         saveToTheDatabase();
     }
 
@@ -49,6 +48,9 @@ public class QrItem {
     }
 
     private void saveToTheDatabase(){
+        if(mStatusCode == 0){
+            return;
+        }
         ContentValues values = new ContentValues();
         values.put(QrDbContract.QrTable.URL_COL, mUrl);
         values.put(QrDbContract.QrTable.STATUS_CODES_COL, mStatusCode);

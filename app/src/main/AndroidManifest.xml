@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".CodeListActivity"
+            android:name=".view.CodeListActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -22,7 +22,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ToolbarCaptureActivity"
+        <activity android:name=".view.CaptureActivity"
                   android:clearTaskOnLaunch="true"
                   android:screenOrientation="portrait"
                   android:stateNotNeeded="true"
@@ -32,7 +32,7 @@
         </activity>
         <provider
             android:authorities="com.exercizes.sanchellios.bananaqr"
-            android:name=".UrlContentProvider"
+            android:name=".model.UrlContentProvider"
             android:exported="false"/>
     </application>
 

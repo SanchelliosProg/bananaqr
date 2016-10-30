@@ -1,4 +1,4 @@
-package com.exercizes.sanchellios.bananaqr;
+package com.exercizes.sanchellios.bananaqr.network;
 
 import java.io.IOException;
 

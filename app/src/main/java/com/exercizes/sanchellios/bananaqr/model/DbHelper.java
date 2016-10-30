@@ -1,4 +1,4 @@
-package com.exercizes.sanchellios.bananaqr;
+package com.exercizes.sanchellios.bananaqr.model;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

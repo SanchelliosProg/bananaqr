@@ -2,6 +2,8 @@ package com.exercizes.sanchellios.bananaqr;
 
 import android.app.Application;
 
+import com.exercizes.sanchellios.bananaqr.model.DbModule;
+
 /**
  * Created by alex on 30.10.16.
  */

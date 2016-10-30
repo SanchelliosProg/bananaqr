@@ -1,13 +1,12 @@
-package com.exercizes.sanchellios.bananaqr;
+package com.exercizes.sanchellios.bananaqr.view;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import com.exercizes.sanchellios.bananaqr.R;
 
 /**
  * Created by alex on 25.10.16.

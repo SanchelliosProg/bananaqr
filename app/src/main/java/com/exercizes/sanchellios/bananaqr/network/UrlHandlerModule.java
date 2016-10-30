@@ -1,4 +1,6 @@
-package com.exercizes.sanchellios.bananaqr;
+package com.exercizes.sanchellios.bananaqr.network;
+
+import com.exercizes.sanchellios.bananaqr.network.UrlHandler;
 
 import javax.inject.Singleton;
 
